@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TODOリスト</title>
+  </head>
+  <body>
+    <h1>TODOリスト</h1>
+    <ul>
+      {% for TODO in todos %}
+      <li>{{ TODO.title }} - {{ TODO.created_at }}</li>
+      {% empty %}
+      <li>TODOはありません。</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
