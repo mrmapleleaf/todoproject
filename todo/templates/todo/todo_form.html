@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TODO追加</title>
+  </head>
+  <body>
+    <h1>TODO追加</h1>
+    <form method="post">
+      {% csrf_token %}
+      <label for="">タイトル:</label>
+      <input type="text" id="title" name="title" required />
+      <br />
+      <button type="submit">追加</button>
+    </form>
+    <p><a href="/">戻る</a></p>
+  </body>
+</html>
