@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8"/>
+    <title>TODO詳細</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}"/>
+</head>
+
+<body>
+  <h1>TODO詳細</h1>
+  <h2>{{ todo.title }}</h2>
+  <p>作成日: {{ todo.created_at }}</p>
+  <p>ステータス: {% if todo.is_completed %} 完了 {% else %}未完了 {% endif %}</p>
+
+  <a href="{% url 'todo_list' %}">TODO一覧に戻る</a>
+</body>
+</html>

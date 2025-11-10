@@ -3,21 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <title>TODOリスト</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}" />
   </head>
   <body>
     <h1>TODOリスト</h1>
     <ul>
       {% for TODO in todos %}
       <li>
-        {{ TODO.title }} - {{ TODO.created_at }} - {% if TODO.is_completed %} ✅
+        <a href="{% url 'todo_detail' TODO.id %}">{{ TODO.title }}</a>
+        - {{ TODO.created_at }} - {% if TODO.is_completed %} ✅
         完了 {% else %} ⏳ 未完了 {% endif %} -
+        <a 
+          href="{% url 'todo_edit' TODO.id %}"
+        >編集
+        </a> 
+        -
         <a
           href="{% url 'todo_delete' TODO.id %}"
           onclick="return confirm('本当に削除しますか？');"
           >削除</a
         >
         -
-        <form action="{% url 'todo_update_status' TODO.id%}" method="post" style="display:inline;">
+        <form action="{% url 'todo_update_status' TODO.id %}" method="post" style="display:inline;">
           {% csrf_token %}
           <button type="submit">
             {% if TODO.is_completed %} 
