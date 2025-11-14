@@ -12,4 +12,6 @@ urlpatterns = [
     ),
     path("edit/<int:todo_id>/", views.todo_edit, name="todo_edit"),
     path("detail/<int:todo_id>/", views.todo_detail, name="todo_detail"),
+    path("signup/", views.sign_up, name="sign_up"),
+    path("login/", views.login, name="login"),
 ]

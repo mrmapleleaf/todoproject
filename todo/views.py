@@ -3,6 +3,8 @@ from django.views.decorators.http import require_POST
 from .models import ToDoItem
 from .forms import ToDoItemForm
 from django.http import Http404
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 
 
 # Create your views here.
@@ -63,3 +65,21 @@ def todo_update_status(request, todo_id):
     todo.is_completed = not todo.is_completed
     todo.save()
     return redirect("todo_list")
+
+
+def sign_up(request):
+    if request.method == "POST":
+        # POSTの時はフォームの内容を処理して、ユーザー作成
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("todo_list")
+    else:
+        # GETの時は空のフォーム表示
+        form = UserCreationForm()
+    return render(request, "registration/signup.html", {"form": form})
+
+
+def login(request):
+    pass
