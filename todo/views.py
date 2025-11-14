@@ -2,12 +2,24 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from .models import ToDoItem
 from .forms import ToDoItemForm
+from django.http import Http404
 
 
 # Create your views here.
 def todo_list(request):
-    todos = ToDoItem.objects.all().order_by("-created_at")
-    return render(request, "todo/todo_list.html", {"todos": todos})
+    status = request.GET.get("status")
+    todos = ToDoItem.objects.order_by("-id")
+
+    if status == "done":
+        todos = todos.filter(is_completed=True)
+    elif status == "undone":
+        todos = todos.filter(is_completed=False)
+    elif status == "all" or status is None:
+        pass
+    else:
+        raise Http404("不正なステータスです。")
+
+    return render(request, "todo/todo_list.html", {"todos": todos, "status": status})
 
 
 def todo_detail(request, todo_id):

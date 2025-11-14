@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ページが見つかりません</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}" />
+  </head>
+  <body>
+    <h1>404 エラー - ページが見つかりません</h1>
+    <h2>{% if exception %}{{ exception }}{% endif %}</h2>
+    <a href="{% url 'todo_list' %}">TODOリストに戻る</a>
+  </body>

@@ -8,6 +8,15 @@
   </head>
   <body>
     <h1>TODOリスト</h1>
+    <div>
+      <form id="filter-form">
+        <select id="status" name="status">
+          <option value="all" {% if status == "all" or not status %}selected{% endif %}>すべて</option>
+          <option value="done" {% if status == "done" %}selected{% endif %}>完了</option>
+          <option value="undone" {% if status == "undone" %}selected{% endif %}>未完了</option>
+        </select>  
+      </form>
+    </div>
     <ul>
       {% for TODO in todos %}
       <li>
@@ -43,3 +52,14 @@
     <a href="{% url 'todo_create' %}">新しいToDoを追加</a>
   </body>
 </html>
+
+<script>
+  document.getElementById('status').addEventListener('change',
+    function() {
+      const selectedStatus = this.value;
+      const baseUrl = window.location.pathname;
+      const query = selectedStatus === 'all' ? '' : `?status=${selectedStatus}`;
+      window.location.href = baseUrl + query;
+    }
+  )
+</script>
