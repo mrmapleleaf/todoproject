@@ -7,8 +7,23 @@
     <link rel="stylesheet" href="{% static 'todo/style.css' %}" />
   </head>
   <body>
-    <h1>TODOリスト</h1>
     <div>
+      {% if user.is_authenticated %}
+        <p>ようこそ、{{ user.username }} さん！</p>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit">ログアウト</button>
+        </form>
+      {% else %}
+        <form method="get" action="{% url 'signup' %}">
+          <button type="submit">新規登録</button>
+        </form>
+        <form method="get" action="{% url 'login' %}">
+          <button type="submit">ログイン</button>
+        </form>
+      {% endif %}
+    </div>
+    <h1>TODOリスト</h1>
       <form id="filter-form">
         <select id="status" name="status">
           <option value="all" {% if status == "all" or not status %}selected{% endif %}>すべて</option>
@@ -63,3 +78,18 @@
     }
   )
 </script>
+
+<style>
+  .btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+</style>

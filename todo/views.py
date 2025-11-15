@@ -4,10 +4,11 @@ from .models import ToDoItem
 from .forms import ToDoItemForm
 from django.http import Http404
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 
 
-# Create your views here.
+@login_required
 def todo_list(request):
     status = request.GET.get("status")
     todos = ToDoItem.objects.order_by("-id")
@@ -24,11 +25,13 @@ def todo_list(request):
     return render(request, "todo/todo_list.html", {"todos": todos, "status": status})
 
 
+@login_required
 def todo_detail(request, todo_id):
     todo = get_object_or_404(ToDoItem, id=todo_id)
     return render(request, "todo/todo_detail.html", {"todo": todo})
 
 
+@login_required
 def todo_create(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -38,6 +41,7 @@ def todo_create(request):
     return render(request, "todo/todo_form.html")
 
 
+@login_required
 def todo_edit(request, todo_id):
     todo = get_object_or_404(ToDoItem, id=todo_id)
 
@@ -52,12 +56,14 @@ def todo_edit(request, todo_id):
     return render(request, "todo/todo_edit.html", {"form": form})
 
 
+@login_required
 def todo_delete(request, todo_id):
     todo = get_object_or_404(ToDoItem, id=todo_id)
     todo.delete()
     return redirect("todo_list")
 
 
+@login_required
 @require_POST
 def todo_update_status(request, todo_id):
     # todo = ToDoItem.objects.get(id=todo_id)
@@ -79,7 +85,3 @@ def sign_up(request):
         # GETの時は空のフォーム表示
         form = UserCreationForm()
     return render(request, "registration/signup.html", {"form": form})
-
-
-def login(request):
-    pass
