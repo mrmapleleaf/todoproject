@@ -27,8 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# 未ログイン時にリダイレクトするURLの設定
+LOGIN_URL = "/login/"
+
+# ログインした後にリダイレクトするURLの設定
 LOGIN_REDIRECT_URL = "/"
 
+# ログアウトした後にリダイレクトするURLの設定
 LOGOUT_REDIRECT_URL = "/login/"
 
 # Application definition
