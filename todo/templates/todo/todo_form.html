@@ -8,11 +8,14 @@
   </head>
   <body>
     <h1>TODO追加</h1>
-    <form method="post">
+    <form method="POST">
       {% csrf_token %}
-      <label for="">タイトル:</label>
+      <label for="">タイトル</label><br />
       <input type="text" id="title" name="title" required />
       <br />
+      <p class="error_message" style="background-color: #f79494ff;">{{ form.due_date.errors }}</p>
+      <label for="due_date">期限日</label><br />
+      <input type="date" id="due_date" name="due_date" /><br /><br />
       <button type="submit">追加</button>
     </form>
     <p><a href="/">戻る</a></p>

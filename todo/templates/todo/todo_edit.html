@@ -2,17 +2,34 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>TODO詳細</title>
+    <title>TODO編集</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'todo/style.css' %}" />
   </head>
   <body>
-    <h1>TODO詳細</h1>
+    <h1>TODO編集</h1>
     <form method="POST">
       {% csrf_token %}
       <!-- フォームのフィールドをpタグで囲って表示するdjangoの機能 -->
-      {{ form.as_p }}
+      {{ form.non_field_errors }}
+
+      <p>
+        {{ form.title.label_tag }}<br>
+        {{ form.title }}
+      </p>
+      <p>
+        {{ form.due_date.errors }}
+        {{ form.due_date.label_tag }}<br>
+        {{ form.due_date }}
+      </p>
+      <p>
+        {{ form.is_completed.label_tag }}<br>
+        {{ form.is_completed }}
+      </p>
+
       <button type="submit">更新</button>
     </form>
     <p><a href="{% url 'todo_list' %}">戻る</a></p>
   </body>
+</html>
+

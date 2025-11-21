@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
-from .models import ToDoItem
-from .forms import ToDoItemForm
 from django.http import Http404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from .models import ToDoItem
+from .forms import ToDoItemForm
+from datetime import date
 
 
 @login_required
@@ -22,7 +23,11 @@ def todo_list(request):
     else:
         raise Http404("不正なステータスです。")
 
-    return render(request, "todo/todo_list.html", {"todos": todos, "status": status})
+    return render(
+        request,
+        "todo/todo_list.html",
+        {"todos": todos, "status": status, "today": date.today()},
+    )
 
 
 @login_required

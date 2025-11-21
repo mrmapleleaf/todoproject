@@ -11,8 +11,8 @@ urlpatterns = [
         views.todo_update_status,
         name="todo_update_status",
     ),
-    path("edit/<int:todo_id>/", views.todo_edit, name="todo_edit"),
-    path("detail/<int:todo_id>/", views.todo_detail, name="todo_detail"),
+    path("edit/<int:todo_id>", views.todo_edit, name="todo_edit"),
+    path("detail/<int:todo_id>", views.todo_detail, name="todo_detail"),
     path("signup/", views.sign_up, name="signup"),
     # django組み込みのログイン・ログアウトビューを使用
     path("login/", auth_views.LoginView.as_view(), name="login"),

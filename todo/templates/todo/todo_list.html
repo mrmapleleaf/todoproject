@@ -33,10 +33,16 @@
       </form>
     </div>
     <ul>
+      <li>タイトル - 期限日 - 作成日 - 状態 - 操作</li>
       {% for TODO in todos %}
-      <li>
+        {% if TODO.due_date >= today %}
+        <li style="background-color: #f79494ff;">
+        {% else %}
+        <li>
+        {% endif %}
         <a href="{% url 'todo_detail' TODO.id %}">{{ TODO.title }}</a>
-        - {{ TODO.created_at }} - {% if TODO.is_completed %} ✅
+        - {{ TODO.due_date | date:'Y/m/d' | default:'期限なし'}}
+        - {{ TODO.created_at | date:'Y/m/d' }} - {% if TODO.is_completed %} ✅
         完了 {% else %} ⏳ 未完了 {% endif %} -
         <a 
           href="{% url 'todo_edit' TODO.id %}"
