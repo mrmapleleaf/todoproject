@@ -4,16 +4,19 @@ from django.http import Http404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .models import ToDoItem
+from .models import ToDoItem, models
 from .forms import ToDoItemForm
 from datetime import date
 
 
 @login_required
 def todo_list(request):
-    status = request.GET.get("status")
-    todos = ToDoItem.objects.filter(user=request.user).order_by("-id")
 
+    # 最初にユーザーに紐づくToDoItemを取得
+    todos = ToDoItem.objects.filter(user=request.user)
+
+    # クエリパラメータからステータスを取得
+    status = request.GET.get("status")
     if status == "done":
         todos = todos.filter(is_completed=True)
     elif status == "undone":
@@ -23,10 +26,42 @@ def todo_list(request):
     else:
         raise Http404("不正なステータスです。")
 
+    # クエリパラメータからソート条件を取得
+    sort_param = request.GET.get("sort", "created_at_desc")
+    # order_byの引数に「-」があると降順、ないと昇順
+    # デフォルトは作成日の降順
+    if sort_param == "due_date_asc":
+        ordering = [
+            models.Case(
+                models.When(due_date__isnull=True, then=models.Value(0)),
+                default=models.Value(1),
+                output_field=models.IntegerField(),
+            ),
+            "due_date",
+        ]
+    elif sort_param == "due_date_desc":
+        # due_dateがnullのものは先頭に持ってくる
+        ordering = [
+            models.Case(
+                models.When(due_date__isnull=True, then=models.Value(0)),
+                default=models.Value(1),
+                output_field=models.IntegerField(),
+            ),
+            "-due_date",
+        ]
+    elif sort_param == "created_at_asc":
+        ordering = ["created_at"]
+    elif sort_param == "created_at_desc" or not sort_param:
+        ordering = ["-created_at"]
+    else:
+        raise Http404("不正なソート条件です。")
+
+    todos = todos.order_by(*ordering)
+
     return render(
         request,
         "todo/todo_list.html",
-        {"todos": todos, "status": status, "today": date.today()},
+        {"todos": todos, "status": status, "today": date.today(), "sort": sort_param},
     )
 
 

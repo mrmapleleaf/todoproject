@@ -31,11 +31,19 @@
           <option value="undone" {% if status == "undone" %}selected{% endif %}>未完了</option>
         </select>  
       </form>
+      <form id="sort-form">
+        <select id="sort" name="sort">
+          <option value="created_at_desc" {% if sort == "created_at_desc" or not sort %}selected{% endif %}>作成日 新しい順</option>
+          <option value="created_at_asc" {% if sort == "created_at_asc" %}selected{% endif %}>作成日 古い順</option>
+          <option value="due_date_asc" {% if sort == "due_date_asc" %}selected{% endif %}>期限日 近い順</option>
+          <option value="due_date_desc" {% if sort == "due_date_desc" %}selected{% endif %}>期限日 遠い順</option>
+        </select>
+      </form>
     </div>
     <ul>
       <li>タイトル - 期限日 - 作成日 - 状態 - 操作</li>
       {% for TODO in todos %}
-        {% if TODO.due_date >= today %}
+        {% if TODO.due_date <= today %}
         <li style="background-color: #f79494ff;">
         {% else %}
         <li>
@@ -75,14 +83,29 @@
 </html>
 
 <script>
-  document.getElementById('status').addEventListener('change',
-    function() {
-      const selectedStatus = this.value;
-      const baseUrl = window.location.pathname;
-      const query = selectedStatus === 'all' ? '' : `?status=${selectedStatus}`;
-      window.location.href = baseUrl + query;
+  const statusSelect = document.getElementById('status');
+  const sortSelect = document.getElementById('sort');
+
+  function getQueryparams() {
+    const status = statusSelect.value;
+    const sort = sortSelect.value;
+    // 空のクエリパラメータを作成
+    const params = new URLSearchParams();
+
+    // statusとsortが選択されている場合のみクエリパラメータに追加
+    if (status) {
+      params.set('status', status);
     }
-  )
+    if (sort) {
+      params.set('sort', sort);
+    }
+    
+    // ページをリダイレクトしてクエリパラメータを適用
+    window.location.href = `?${params.toString()}`;
+  }
+
+  statusSelect.addEventListener('change', getQueryparams);
+  sortSelect.addEventListener('change', getQueryparams);
 </script>
 
 <style>
